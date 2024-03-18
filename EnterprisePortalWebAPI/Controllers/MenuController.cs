@@ -1,22 +1,18 @@
-﻿using EnterprisePortalWebAPI.Controllers;
-using EnterprisePortalWebAPI.Core.DTO;
+﻿using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
-namespace MTNVoiceOfCustomer.Controllers
+namespace EnterprisePortalWebAPI.Controllers
 {
 	[ApiController]
 	[EnableCors("AllowMultipleOrigins")]
 
-	public class MenuController : RootController
+	public class MenuController(IMenuService service) : RootController
 	{
-		private readonly IMenuService _service;
-		public MenuController(IMenuService service)
-		{
-			_service = service;
-		}
+		private readonly IMenuService _service = service;
+
 		[HttpPost]
 		public async Task<IActionResult> Create([FromBody] MenuDTO request)
 		{
@@ -43,9 +39,9 @@ namespace MTNVoiceOfCustomer.Controllers
 			return BadRequest(result);
 		}
 		[HttpGet("by-cooparete")]
-		public async Task<IActionResult> GetAudiences([FromQuery] ClientParameters parameters, [FromQuery] string cooperateId)
+		public IActionResult GetMenuByCooperate([FromQuery] ClientParameters parameters, [FromQuery] string cooperateId)
 		{
-			var result = await _service.GetMenu(parameters, cooperateId);
+			var result = _service.GetMenu(parameters, cooperateId);
 			var metadata = new
 			{
 				result.Data?.TotalCount,

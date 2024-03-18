@@ -5,11 +5,16 @@ VisualStudioVersion = 17.8.34408.163
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterprisePortalWebAPI", "EnterprisePortalWebAPI\EnterprisePortalWebAPI.csproj", "{1DAFFB35-3115-48CF-937D-37B2BD017A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterprisePortalWebAPI.Core", "EnterprisePortalWebAPI.Core\EnterprisePortalWebAPI.Core.csproj", "{EDD1DB34-419B-4A84-83B5-D317CD3507B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterprisePortalWebAPI.Core", "EnterprisePortalWebAPI.Core\EnterprisePortalWebAPI.Core.csproj", "{EDD1DB34-419B-4A84-83B5-D317CD3507B1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterprisePortalWebAPI.Service", "EnterprisePortalWebAPI.Service\EnterprisePortalWebAPI.Service.csproj", "{A359486C-BE61-4D7A-9C77-CCB111AFF117}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterprisePortalWebAPI.Service", "EnterprisePortalWebAPI.Service\EnterprisePortalWebAPI.Service.csproj", "{A359486C-BE61-4D7A-9C77-CCB111AFF117}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnterprisePortalWebAPI.Utility", "EnterprisePortalWebAPI.Utility\EnterprisePortalWebAPI.Utility.csproj", "{06835980-A3D7-430B-B694-EDF0658C73A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnterprisePortalWebAPI.Utility", "EnterprisePortalWebAPI.Utility\EnterprisePortalWebAPI.Utility.csproj", "{06835980-A3D7-430B-B694-EDF0658C73A4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D71A9504-4DA1-4462-A6AB-186756C9D1F1}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

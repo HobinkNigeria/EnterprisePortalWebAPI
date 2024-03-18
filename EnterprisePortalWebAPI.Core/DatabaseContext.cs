@@ -6,6 +6,10 @@ namespace EnterprisePortalWebAPI.Core
 	public class DatabaseContext(DbContextOptions options) : DbContext(options)
 	{
 		/// <summary>
+		/// User
+		/// </summary>
+		public DbSet<User> Users => Set<User>();
+		/// <summary>
 		/// Menu
 		/// </summary>
 		public DbSet<Menu> Menus => Set<Menu>();

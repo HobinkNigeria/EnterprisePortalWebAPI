@@ -4,18 +4,25 @@ using EnterprisePortalWebAPI.Service.Interface;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 using EnterprisePortalWebAPI.Utility;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddDbContext<DatabaseContext>(options =>
 								 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapProfiles>(),
 															 AppDomain.CurrentDomain.GetAssemblies());
+
+
 builder.Services.AddTransient<IMenuService, MenuService>();
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
 builder.Services.AddSwaggerGen();
 builder.Services.AddApiVersioning(config =>
 {
