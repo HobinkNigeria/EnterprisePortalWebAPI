@@ -1,4 +1,4 @@
-﻿namespace EnterprisePortalWebAPI.Core.DTO
+﻿namespace EnterprisePortalWebAPI.Core.DT
 {
     public static class ResponseCodes
     {
@@ -17,7 +17,6 @@
         public const string INVALID_SESSION = "HB012";
         public const string MISSING_AUTH_TOKEN = "HB013";
         public const string USER_NOT_FOUND = "HB014";
-        public const string QUESTION_NOT_FOUND = "HB015";
-        public const string SURVEY_NOT_ANSWERED_CORECTLY = "HB016";
+        public const string BUSINESS_EXIST = "HB015";
     }
 }

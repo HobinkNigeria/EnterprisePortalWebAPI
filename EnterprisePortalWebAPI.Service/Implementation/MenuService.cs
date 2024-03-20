@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using EnterprisePortalWebAPI.Core;
 using EnterprisePortalWebAPI.Core.Domain;
+using EnterprisePortalWebAPI.Core.DT;
 using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
 using EnterprisePortalWebAPI.Utility;
 using Microsoft.EntityFrameworkCore;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EnterprisePortalWebAPI.Service.Implementation
 {
@@ -25,7 +25,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					responses.Error = new ErrorResponse
 					{
 						ResponseCode = ResponseCodes.MENU_ITEM_EXIST,
-						ResponseDescription = $"Item {request.Item} has already been created"
+						ResponseDescription = $"Item '{request.Item}' has already been created"
 					};
 					responses.IsSuccessful = false;
 					return responses;
@@ -65,7 +65,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					response.Error = new ErrorResponse
 					{
 						ResponseCode = ResponseCodes.REQUEST_NOT_FOUND,
-						ResponseDescription = $"Menu item {request.Item} not found"
+						ResponseDescription = $"Menu item '{request.Item}' not found"
 					};
 					response.IsSuccessful = false;
 					return response;
@@ -102,7 +102,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					response.Error = new ErrorResponse
 					{
 						ResponseCode = ResponseCodes.REQUEST_NOT_FOUND,
-						ResponseDescription = $"Menu item with reference{menuId} not found"
+						ResponseDescription = $"Menu item with reference '{menuId}' not found"
 					};
 					response.IsSuccessful = false;
 					return response;
@@ -137,7 +137,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					response.Error = new ErrorResponse
 					{
 						ResponseCode = ResponseCodes.REQUEST_NOT_FOUND,
-						ResponseDescription = $"Menu item with reference{menuId} not found"
+						ResponseDescription = $"Menu item with reference '{menuId}' not found"
 					};
 					response.IsSuccessful = false;
 					return response;
@@ -157,18 +157,18 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				return response;
 			}
 		}
-		public async Task<Responses> GetMenu(ClientParameters parameters, string cooperateId)
+		public Responses GetMenu(ClientParameters parameters, string cooperateId)
 		{
 			var response = new Responses(false);
 			try
 			{
-				var menu =  _context.Menus.AsQueryable().Where(x => x.CooperateID == cooperateId);
+				var menu = _context.Menus.AsQueryable().Where(x => x.CooperateID == cooperateId);
 				if (menu is null)
 				{
 					response.Error = new ErrorResponse
 					{
 						ResponseCode = ResponseCodes.REQUEST_NOT_FOUND,
-						ResponseDescription = $"No menu for cooperate with reference{cooperateId}"
+						ResponseDescription = $"No menu for cooperate with reference '{cooperateId}'"
 					};
 					response.IsSuccessful = false;
 					return response;

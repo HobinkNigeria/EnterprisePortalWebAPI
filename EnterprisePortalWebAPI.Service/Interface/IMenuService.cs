@@ -8,6 +8,6 @@ namespace EnterprisePortalWebAPI.Service.Interface
 		Task<Responses> Update(MenuDTO request, string menuId);
 		Task<Responses> Delete(string menuId);
 		Task<Responses> Get(string menuId);
-		Task<Responses> GetMenu(ClientParameters parameters, string cooperateId);
+		Responses GetMenu(ClientParameters parameters, string cooperateId);
 	}
 }
