@@ -17,5 +17,6 @@
         public const string INVALID_SESSION = "HB012";
         public const string MISSING_AUTH_TOKEN = "HB013";
         public const string USER_NOT_FOUND = "HB014";
+        public const string BUSINESS_EXIST = "HB015";
     }
 }

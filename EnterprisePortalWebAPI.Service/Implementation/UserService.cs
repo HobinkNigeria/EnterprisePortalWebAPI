@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using EnterprisePortalWebAPI.Core;
 using EnterprisePortalWebAPI.Core.Domain;
 using EnterprisePortalWebAPI.Core.DT;
@@ -18,7 +19,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var responses = new Responses(false);
 			try
 			{
-				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(request.Email, StringComparison.CurrentCultureIgnoreCase));
+				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
 				if (user is not null)
 				{
 					responses.Error = new ErrorResponse
@@ -34,6 +35,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				userToCreate.CooperateID = isAdditionalAccount ? request.CooperateID : Guid.NewGuid().ToString();
 				userToCreate.DateCreated = DateTime.Now;
 				userToCreate.DateUpdated = DateTime.Now;
+				userToCreate.Password = Util.HashPassword(request.Password);
 
 				_context.Add(userToCreate);
 				await _context.SaveChangesAsync();
@@ -71,10 +73,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				}
 				else
 				{
-					var userCreated = await Create(request, true);
-					responses.IsSuccessful = true;
-					responses.Data = "Successfully completed";
-					return responses;
+				return await Create(request, true);
 				}
 			}
 			catch (Exception)
@@ -106,6 +105,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				}
 				var userToUpdate = _mapper.Map(request, user);
 				userToUpdate.DateUpdated = DateTime.Now;
+				userToUpdate.Password = user.Password;
 
 				_context.Update(userToUpdate);
 				await _context.SaveChangesAsync();
@@ -130,7 +130,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var response = new Responses(false);
 			try
 			{
-				var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId);
+				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
 				if (user is null)
 				{
 					response.Error = new ErrorResponse
@@ -226,7 +226,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					return response;
 				}
 				response.IsSuccessful = true;
-				response.Data = user;
+				response.Data = _mapper.Map<UserResponseDTO>(user);
 				return response;
 			}
 			catch (Exception)
@@ -245,9 +245,10 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var response = new Responses(false);
 			try
 			{
-				var users = _context.Users.Where(x => x.CooperateID == cooperateId);
+				var users = _context.Users.Where(x => x.CooperateID == cooperateId)
+					.Select(x=>_mapper.Map<UserResponseDTO>(x));
 
-				var result = PagedList<User>.ToPagedList(users,
+				var result = PagedList<UserResponseDTO>.ToPagedList(users,
 				parameters.PageNumber,
 				parameters.PageSize);
 
@@ -271,7 +272,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var response = new Responses(false);
 			try
 			{
-				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(request.Email, StringComparison.CurrentCultureIgnoreCase));
+				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
 				if (user is null)
 				{
 					response.Error = new ErrorResponse
@@ -295,8 +296,11 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				}
 				var jwtToken = await _jwtService.GenerateToken(user.Email);
 				var responsePayload = _mapper.Map<LoginResponseDTO>(user);
-				responsePayload.RefreshToken = jwtToken.RefreshToken;
 				responsePayload.Token = jwtToken.JwtToken;
+
+				user.LastLogin = DateTime.Now;
+				_context.Update(user);
+				await _context.SaveChangesAsync();
 
 				response.IsSuccessful = true;
 				response.Data = responsePayload;
@@ -318,7 +322,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var response = new Responses(false);
 			try
 			{
-				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.Equals(request.Email, StringComparison.CurrentCultureIgnoreCase));
+				var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
 				if (user is null)
 				{
 					response.Error = new ErrorResponse
@@ -329,11 +333,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					response.IsSuccessful = false;
 					return response;
 				}
-				var jwtToken = await _jwtService.RefreshToken(request);
-
-				response.IsSuccessful = true;
-				response.Data = jwtToken;
-				return response;
+				return await _jwtService.RefreshToken(request);
 			}
 			catch (Exception)
 			{

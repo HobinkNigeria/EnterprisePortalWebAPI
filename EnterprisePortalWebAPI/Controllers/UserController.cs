@@ -1,5 +1,6 @@
 ﻿using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace EnterprisePortalWebAPI.Controllers
 				return Ok(result);
 			return BadRequest(result);
 		}
-
+		[Authorize]
 		[HttpPost("refresh-token")]
 		public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenReqDTO request)
 		{
@@ -38,7 +39,7 @@ namespace EnterprisePortalWebAPI.Controllers
 			return BadRequest(result);
 		}
 		[HttpPost()]
-		public async Task<IActionResult> Create([FromQuery] UserDTO request)
+		public async Task<IActionResult> Create([FromBody] UserDTO request)
 		{
 			var result = await _service.Create(request,false);
 			if (result.IsSuccessful)
@@ -46,7 +47,7 @@ namespace EnterprisePortalWebAPI.Controllers
 			return BadRequest(result);
 		}
 		[HttpPost("additional-account")]
-		public async Task<IActionResult> CreateAdditionalAccount([FromQuery] UserDTO request)
+		public async Task<IActionResult> CreateAdditionalAccount([FromBody] UserDTO request)
 		{
 			var result = await _service.CreateAdditionalAccount(request);
 			if (result.IsSuccessful)

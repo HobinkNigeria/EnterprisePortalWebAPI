@@ -19,10 +19,9 @@ namespace EnterprisePortalWebAPI.Utility
 		public async Task<GenerateTokenDTO> GenerateToken(string email)
 		{
 			string token = await GenerateToken(email, GetUserIpAddress());
-			var refreshtoken = GenerateRefreshToken();
 			if (!string.IsNullOrWhiteSpace(token))
 			{
-				return new GenerateTokenDTO(email, token, refreshtoken.Token);
+				return new GenerateTokenDTO(email, token, string.Empty);
 			}
 			else
 				return new GenerateTokenDTO(email, string.Empty, string.Empty);
@@ -54,7 +53,7 @@ namespace EnterprisePortalWebAPI.Utility
 			{
 				var ip = GetUserIpAddress();
 				var email = GetSessionUser(request.Token);
-				if (email == null || !string.Equals(email, request.Email, StringComparison.OrdinalIgnoreCase))
+				if (email == null || !email.IEquals(request.Email))
 				{
 					response.Error = new ErrorResponse()
 					{

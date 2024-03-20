@@ -13,6 +13,9 @@ namespace EnterprisePortalWebAPI.Utility
 			CreateMap<UserDTO,User>();
 			CreateMap<User, LoginResponseDTO >().ReverseMap();
 			CreateMap<User, UserDTO>().ReverseMap();
+			CreateMap<User, UserResponseDTO>().ReverseMap();
+			CreateMap<BusinessDTO, Business>();
+			CreateMap<Business, BusinessDTO>().ReverseMap();
 		}
 	}
 }
