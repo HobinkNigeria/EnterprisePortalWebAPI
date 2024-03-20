@@ -17,6 +17,7 @@ namespace EnterprisePortalWebAPI.Core.Domain
 		public bool IsVerified { get; set; }
 		public DateTime VerificationDate { get; set; }
 		public VerificationStage VerificationStage { get; set; }
+		public string VerificationRemark { get; set; } = string.Empty;
 		public string VerificationOfficer { get; set; } = string.Empty;
 
 	}

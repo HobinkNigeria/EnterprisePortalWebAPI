@@ -4,8 +4,9 @@ namespace EnterprisePortalWebAPI.Core.Enum
 {
 	public enum VerificationStage
 	{
-		DocumentVerification,
-		PhysicalAddressVerification,
-		Completed
+		Pending,
+		InProgress,
+		PassedVerification,
+		FailedVerification
 	}
 }

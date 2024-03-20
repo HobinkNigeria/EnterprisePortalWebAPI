@@ -32,6 +32,7 @@ builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapProfiles>(),
 
 builder.Services.AddTransient<IMenuService, MenuService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IBusinessService, BusinessService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 

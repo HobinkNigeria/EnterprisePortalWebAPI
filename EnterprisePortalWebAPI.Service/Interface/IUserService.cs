@@ -11,6 +11,7 @@ namespace EnterprisePortalWebAPI.Service.Interface
 		Task<Responses> Delete(string userId);
 		Task<Responses> Get(string userId);
 		Responses GetbyCooperate(ClientParameters parameters, string cooperateId);
+		Responses GetByBusinessId(ClientParameters parameters, string cooperateId, string businessId);
 		Task<Responses> Login(LoginDTO request);
 		Task<Responses> RefreshLoginToken(RefreshTokenReqDTO request);
 	}
