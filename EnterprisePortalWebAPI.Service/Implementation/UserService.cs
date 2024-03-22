@@ -6,10 +6,11 @@ using EnterprisePortalWebAPI.Core.DT;
 using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
 using EnterprisePortalWebAPI.Utility;
+using EnterprisePortalWebAPI.Utility.Services;
 using Microsoft.EntityFrameworkCore;
 namespace EnterprisePortalWebAPI.Service.Implementation
 {
-	public class UserService(DatabaseContext context, IMapper mapper, IJwtService jwtService) : IUserService
+    public class UserService(DatabaseContext context, IMapper mapper, IJwtService jwtService) : IUserService
 	{
 		private readonly DatabaseContext _context = context;
 		private readonly IMapper _mapper = mapper;

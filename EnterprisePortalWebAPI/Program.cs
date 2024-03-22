@@ -8,6 +8,7 @@ using EnterprisePortalWebAPI.Utility;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.OpenApi.Models;
 using EnterprisePortalWebAPI.Filters;
+using EnterprisePortalWebAPI.Utility.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +35,10 @@ builder.Services.AddTransient<IMenuService, MenuService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IBusinessService, BusinessService>();
 builder.Services.AddTransient<IJwtService, JwtService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IOneTimePasswordService, OneTimePasswordService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
 
 builder.Services.AddSwaggerGen(x =>
 {
