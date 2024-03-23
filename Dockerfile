@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 # Define user properties
 ARG USERNAME=alphasystems
@@ -24,7 +24,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
 # Set the working directory and grant permissions to the user 
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["EnterprisePortalWebAPI/EnterprisePortalWebAPI.csproj", "EnterprisePortalWebAPI/"]
 RUN dotnet restore "EnterprisePortalWebAPI/EnterprisePortalWebAPI.csproj"
