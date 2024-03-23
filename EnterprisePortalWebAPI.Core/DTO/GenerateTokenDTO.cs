@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EnterprisePortalWebAPI.Core.DTO
+﻿namespace EnterprisePortalWebAPI.Core.DTO
 {
 	public class GenerateTokenDTO(string email, string jwtToken, string refreshToken)
 	{

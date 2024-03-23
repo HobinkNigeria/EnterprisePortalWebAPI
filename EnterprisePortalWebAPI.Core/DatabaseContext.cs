@@ -17,6 +17,10 @@ namespace EnterprisePortalWebAPI.Core
 		/// Menu
 		/// </summary>
 		public DbSet<Menu> Menus => Set<Menu>();
+		/// <summary>
+		/// Menu
+		/// </summary>
+		public DbSet<OneTimePassword> OneTimePasswords => Set<OneTimePassword>();
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Menu>()

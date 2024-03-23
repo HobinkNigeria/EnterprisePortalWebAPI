@@ -5,6 +5,7 @@ namespace EnterprisePortalWebAPI.Core.Enum
 	public enum UserRole
 	{
 		Admin,
-		Operator
+		Operator,
+		Owner
 	}
 }

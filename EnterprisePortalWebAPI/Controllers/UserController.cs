@@ -56,26 +56,26 @@ namespace EnterprisePortalWebAPI.Controllers
 		}
 
 		[HttpPut]
-		public async Task<IActionResult> UpdateUser([FromBody] UserDTO request, [FromQuery] string UserId)
+		public async Task<IActionResult> UpdateUser([FromBody] UserDTO request, [FromQuery] string userId)
 		{
-			var result = await _service.Update(request, UserId);
+			var result = await _service.Update(request, userId);
 			if (result.IsSuccessful)
 				return Ok(result);
 			return BadRequest(result);
 		}
 
 		[HttpGet()]
-		public async Task<IActionResult> GetUser([FromQuery] string UserId)
+		public async Task<IActionResult> GetUser([FromQuery] string userId)
 		{
-			var result = await _service.Get(UserId);
+			var result = await _service.Get(userId);
 			if (result.IsSuccessful)
 				return Ok(result);
 			return BadRequest(result);
 		}
 		[HttpDelete()]
-		public async Task<IActionResult> DeleteUser([FromQuery] string UserId)
+		public async Task<IActionResult> DeleteUser([FromQuery] string userId)
 		{
-			var result = await _service.Delete(UserId);
+			var result = await _service.Delete(userId);
 			if (result.IsSuccessful)
 				return Ok(result);
 			return BadRequest(result);
@@ -94,7 +94,25 @@ namespace EnterprisePortalWebAPI.Controllers
 				result?.Data?.HasPrevious
 			};
 			Response.Headers["X-Pagination"] = JsonConvert.SerializeObject(metadata);
-			if (result.IsSuccessful)
+			if (result!.IsSuccessful)
+				return Ok(result);
+			return BadRequest(result);
+		}
+		[HttpGet("by-business")]
+		public IActionResult GetByBusiness([FromQuery] ClientParameters parameters, [FromQuery] string cooperateId, [FromQuery] string businessId)
+		{
+			var result = _service.GetByBusinessId(parameters, cooperateId, businessId);
+			var metadata = new
+			{
+				result?.Data?.TotalCount,
+				result?.Data?.PageSize,
+				result?.Data?.CurrentPage,
+				result?.Data?.TotalPages,
+				result?.Data?.HasNext,
+				result?.Data?.HasPrevious
+			};
+			Response.Headers["X-Pagination"] = JsonConvert.SerializeObject(metadata);
+			if (result!.IsSuccessful)
 				return Ok(result);
 			return BadRequest(result);
 		}

@@ -6,10 +6,11 @@ using EnterprisePortalWebAPI.Core.DT;
 using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
 using EnterprisePortalWebAPI.Utility;
+using EnterprisePortalWebAPI.Utility.Services;
 using Microsoft.EntityFrameworkCore;
 namespace EnterprisePortalWebAPI.Service.Implementation
 {
-	public class UserService(DatabaseContext context, IMapper mapper, IJwtService jwtService) : IUserService
+    public class UserService(DatabaseContext context, IMapper mapper, IJwtService jwtService) : IUserService
 	{
 		private readonly DatabaseContext _context = context;
 		private readonly IMapper _mapper = mapper;
@@ -247,6 +248,33 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			{
 				var users = _context.Users.Where(x => x.CooperateID == cooperateId)
 					.Select(x=>_mapper.Map<UserResponseDTO>(x));
+
+				var result = PagedList<UserResponseDTO>.ToPagedList(users,
+				parameters.PageNumber,
+				parameters.PageSize);
+
+				response.IsSuccessful = true;
+				response.Data = result;
+				return response;
+			}
+			catch (Exception)
+			{
+				response.Error = new ErrorResponse
+				{
+					ResponseCode = ResponseCodes.GENERAL_ERROR,
+					ResponseDescription = "Operation failed, kindly retry"
+				};
+				response.IsSuccessful = false;
+				return response;
+			}
+		}
+		public Responses GetByBusinessId(ClientParameters parameters, string cooperateId, string businessId)
+		{
+			var response = new Responses(false);
+			try
+			{
+				var users = _context.Users.Where(x => x.CooperateID == cooperateId && x.BusinessID == businessId)
+					.Select(x => _mapper.Map<UserResponseDTO>(x));
 
 				var result = PagedList<UserResponseDTO>.ToPagedList(users,
 				parameters.PageNumber,
