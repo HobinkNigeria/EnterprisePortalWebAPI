@@ -38,7 +38,7 @@ builder.Services.AddTransient<IJwtService, JwtService>();
 builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IOneTimePasswordService, OneTimePasswordService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-
+builder.Services.AddHealthChecks();
 
 builder.Services.AddSwaggerGen(x =>
 {
@@ -82,6 +82,7 @@ builder.Services.AddApiVersioning(config =>
 });
 builder.Services.AddTokenAuthentication(builder.Configuration);
 var app = builder.Build();
+app.MapHealthChecks("/health");
 app.UseSwagger();
 app.UseSwaggerUI();
 
