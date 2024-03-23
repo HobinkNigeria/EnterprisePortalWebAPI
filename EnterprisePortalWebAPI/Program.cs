@@ -14,17 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddCors(options =>
-{
-	options.AddPolicy("AllowMultipleOrigins", builder =>
-	{
-		builder
-				.AllowAnyOrigin()
-				.AllowAnyHeader()
-				.WithExposedHeaders("X-Pagination")
-				.AllowAnyMethod();
-	});
-});
 builder.Services.AddDbContext<DatabaseContext>(options =>
 								 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MapProfiles>(),
@@ -88,7 +77,6 @@ app.UseSwaggerUI();
 
 app.UseAuthentication();
 app.UseRouting();
-app.UseCors();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
