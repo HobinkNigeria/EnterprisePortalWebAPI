@@ -2,7 +2,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 
 # Define user properties
-ARG USERNAME=alphasystems
+# ARG USERNAME=alphasystems
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
