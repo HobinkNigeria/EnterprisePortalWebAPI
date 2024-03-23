@@ -8,10 +8,10 @@ ARG USER_GID=$USER_UID
 
 # Set the working directory and grant permissions to the user 
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 5244
 ARG environment
 
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://+:5244
 ENV ASPNETCORE_ENVIRONMENT=$environment
 
 # Switch to the non-root user 
