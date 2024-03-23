@@ -13,6 +13,17 @@ using EnterprisePortalWebAPI.Utility.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowMultipleOrigins", builder =>
+	{
+		builder
+				.AllowAnyOrigin()
+				.AllowAnyHeader()
+				.WithExposedHeaders("X-Pagination")
+				.AllowAnyMethod();
+	});
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 								 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
@@ -28,6 +39,8 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddTransient<IOneTimePasswordService, OneTimePasswordService>();
 builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 builder.Services.AddHealthChecks();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession();
 
 builder.Services.AddSwaggerGen(x =>
 {
@@ -75,8 +88,20 @@ app.MapHealthChecks("/health");
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseAuthentication();
+app.UseSession();
+
+app.Use(async (context, next) =>
+{
+	var JWToken = context.Session.GetString("jwtToken");
+	if (!string.IsNullOrEmpty(JWToken))
+	{
+		context.Request.Headers.Append("Authorization", "Bearer " + JWToken);
+	}
+	await next();
+});
 app.UseRouting();
+app.UseCors("AllowMultipleOrigins");
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
