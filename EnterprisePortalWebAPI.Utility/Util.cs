@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Text;
 using System.Text.RegularExpressions;
 namespace EnterprisePortalWebAPI.Utility
 {
@@ -29,5 +30,19 @@ namespace EnterprisePortalWebAPI.Utility
 
 		[GeneratedRegex(@"^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$")]
 		private static partial Regex MyRegex();
+		public static string GenerateRandomPassword(int length)
+		{
+			const string validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_=+";
+			StringBuilder sb = new();
+			Random random = new();
+
+			for (int i = 0; i < length; i++)
+			{
+				int index = random.Next(validChars.Length);
+				sb.Append(validChars[index]);
+			}
+
+			return sb.ToString();
+		}
 	}
 }

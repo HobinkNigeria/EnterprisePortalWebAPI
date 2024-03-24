@@ -14,5 +14,6 @@ namespace EnterprisePortalWebAPI.Service.Interface
 		Responses GetByBusinessId(ClientParameters parameters, string cooperateId, string businessId);
 		Task<Responses> Login(LoginDTO request);
 		Task<Responses> RefreshLoginToken(RefreshTokenReqDTO request);
+		Task<Responses> ForgetPassword(string email);
 	}
 }

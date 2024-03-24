@@ -11,5 +11,11 @@ namespace EnterprisePortalWebAPI.Core.DTO
 		public required string Email { get; set; }
 		public UserRole Role { get; set; }
 		public DateTime LastLogin { get; set; }
+		public List<BuinessAvailable>? Businesses { get; set; }
+	}
+	public class BuinessAvailable
+	{
+		public required string BusinessId { get; set; }
+		public required string BusinessName { get; set; }
 	}
 }
