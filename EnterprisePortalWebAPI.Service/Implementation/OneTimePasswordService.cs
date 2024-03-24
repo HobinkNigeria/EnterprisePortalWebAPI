@@ -3,6 +3,7 @@ using EnterprisePortalWebAPI.Core.Domain;
 using EnterprisePortalWebAPI.Core.DT;
 using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
+using EnterprisePortalWebAPI.Utility;
 using EnterprisePortalWebAPI.Utility.Services;
 using Microsoft.EntityFrameworkCore;
 namespace EnterprisePortalWebAPI.Service.Implementation
@@ -32,7 +33,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				DateTime creationTime = DateTime.Now;
 				DateTime expiryTime = creationTime.AddMinutes(5);
 
-				_emailService.SendEmail(otp, request.Email, request.Purpose.ToString());
+				_emailService.SendEmail(request.Email, request.Purpose.ToString(),EmailTemplate.GetTemplate(request.Purpose.ToString(),otp));
 
 				var otpToRecord = new OneTimePassword()
 				{
@@ -87,7 +88,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					};
 					responses.IsSuccessful = false;
 				}
-				else if (otpSent.ExpiryTime >= DateTime.Now)
+				else if (otpSent.ExpiryTime <= DateTime.Now)
 				{
 					responses.Error = new ErrorResponse
 					{
@@ -109,10 +110,10 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				{
 					responses.IsSuccessful = true;
 					responses.Data = "Successfully validated";
+					_context.Remove(otpSent);
+					await _context.SaveChangesAsync();
 				}
-				_context.Remove(otpSent);
-				await _context.SaveChangesAsync();
-
+		
 				return responses;
 			}
 			catch (Exception)

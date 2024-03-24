@@ -38,6 +38,14 @@ namespace EnterprisePortalWebAPI.Controllers
 				return Ok(result);
 			return BadRequest(result);
 		}
+		[HttpPost("forget-password")]
+		public async Task<IActionResult> ForgetPassword([FromBody] ForgetPasswordDTO request)
+		{
+			var result = await _service.ForgetPassword(request.Email);
+			if (result.IsSuccessful)
+				return Ok(result);
+			return BadRequest(result);
+		}
 		[HttpPost()]
 		public async Task<IActionResult> Create([FromBody] UserDTO request)
 		{

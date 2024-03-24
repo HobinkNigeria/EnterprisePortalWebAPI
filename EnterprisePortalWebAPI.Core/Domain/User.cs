@@ -1,5 +1,4 @@
 ﻿using EnterprisePortalWebAPI.Core.Enum;
-using System.Text.Json.Serialization;
 
 namespace EnterprisePortalWebAPI.Core.Domain
 {
@@ -13,6 +12,7 @@ namespace EnterprisePortalWebAPI.Core.Domain
 		public required string Password { get; set; }
 		public DateTime PasswordLastChanged { get; set; }
 		public DateTime LastLogin { get; set; }
+		public bool PasswordIsSystemGenerated { get; set; } = false;
 		public UserRole Role { get; set; }
 		public bool IsActive { get; set; } = true;
 	}

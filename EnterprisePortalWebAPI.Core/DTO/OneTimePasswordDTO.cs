@@ -1,5 +1,4 @@
 ﻿using EnterprisePortalWebAPI.Core.Enum;
-
 namespace EnterprisePortalWebAPI.Core.DTO
 {
 	public class OneTimePasswordDTO
