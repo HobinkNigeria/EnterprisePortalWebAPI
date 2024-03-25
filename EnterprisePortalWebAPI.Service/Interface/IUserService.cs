@@ -4,7 +4,7 @@ namespace EnterprisePortalWebAPI.Service.Interface
 {
 	public interface IUserService
 	{
-		Task<Responses> Create(UserDTO request, bool isAdditionalAccount);
+		Task<Responses> Create(AdminUserDTO request);
 		Task<Responses> CreateAdditionalAccount(UserDTO request);
 		Task<Responses> Update(UserDTO request, string userId);
 		Task<Responses> UpdatePassword(ChangePasswordDTO request);

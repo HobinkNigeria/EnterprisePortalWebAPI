@@ -47,9 +47,9 @@ namespace EnterprisePortalWebAPI.Controllers
 			return BadRequest(result);
 		}
 		[HttpPost()]
-		public async Task<IActionResult> Create([FromBody] UserDTO request)
+		public async Task<IActionResult> Create([FromBody] AdminUserDTO request)
 		{
-			var result = await _service.Create(request,false);
+			var result = await _service.Create(request);
 			if (result.IsSuccessful)
 				return Ok(result);
 			return BadRequest(result);

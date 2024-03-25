@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 namespace EnterprisePortalWebAPI.Controllers
 {
 	[ApiController]
+	[Authorize]
 	[EnableCors("AllowMultipleOrigins")]
 	public class BusinessController(IBusinessService service) : RootController
 	{
@@ -21,7 +22,6 @@ namespace EnterprisePortalWebAPI.Controllers
 				return Ok(result);
 			return BadRequest(result);
 		}
-		[Authorize]
 		[HttpPut()]
 		public async Task<IActionResult> Update([FromBody] BusinessDTO request, [FromQuery] string businessId)
 		{
