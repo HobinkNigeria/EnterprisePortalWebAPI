@@ -18,6 +18,29 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var responses = new Responses(false);
 			try
 			{
+				var expiredOTPs = await _context.OneTimePasswords
+				.Where(x => x.Email.ToLower() == request.Email.ToLower() &&
+										(x.ExpiryTime <= DateTime.Now || x.IsUsed))
+				.ToListAsync();
+
+				_context.OneTimePasswords.RemoveRange(expiredOTPs);
+				await _context.SaveChangesAsync();
+
+				if(request.Purpose == Core.Enum.OneTimePasswordPurpose.Registration)
+				{
+					var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
+					if (user is not null)
+					{
+						responses.Error = new ErrorResponse
+						{
+							ResponseCode = ResponseCodes.USER_EXIST,
+							ResponseDescription = $"User with e-mail '{request.Email}' already exist, please contact the support care"
+						};
+						responses.IsSuccessful = false;
+						return responses;
+					}
+				}
+
 				var otpSent = await _context.OneTimePasswords.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower() && x.Purpose == request.Purpose && x.IsUsed == false);
 				if (otpSent is not null && otpSent.ExpiryTime >= DateTime.Now)
 				{
@@ -67,7 +90,8 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var responses = new Responses(false);
 			try
 			{
-				var otpSent = await _context.OneTimePasswords.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower() && x.Purpose == request.Purpose);
+				var existingOtps = await _context.OneTimePasswords.Where(x => x.Email.ToLower() == request.Email.ToLower() && x.Purpose == request.Purpose && x.ExpiryTime >= DateTime.Now).ToListAsync();
+				var otpSent = existingOtps.OrderByDescending(x => x.DateCreated).FirstOrDefault();
 				if (otpSent is null)
 				{
 					responses.Error = new ErrorResponse
