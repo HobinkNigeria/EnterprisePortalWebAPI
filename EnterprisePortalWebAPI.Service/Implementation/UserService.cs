@@ -9,13 +9,14 @@ using EnterprisePortalWebAPI.Utility.Services;
 using Microsoft.EntityFrameworkCore;
 namespace EnterprisePortalWebAPI.Service.Implementation
 {
-	public class UserService(DatabaseContext context, IMapper mapper, IJwtService jwtService, IEmailService emailService) : IUserService
+	public class UserService(DatabaseContext context, IMapper mapper, IJwtService jwtService, IEmailService emailService, IOneTimePasswordService oneTimePasswordService) : IUserService
 	{
 		private readonly DatabaseContext _context = context;
 		private readonly IMapper _mapper = mapper;
 		private readonly IJwtService _jwtService = jwtService;
 		private readonly IEmailService _emailService = emailService;
-		public async Task<Responses> Create(UserDTO request, bool isAdditionalAccount)
+		private readonly IOneTimePasswordService _oneTimePasswordService = oneTimePasswordService;
+		public async Task<Responses> Create(AdminUserDTO request)
 		{
 			var responses = new Responses(false);
 			try
@@ -31,8 +32,12 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 					responses.IsSuccessful = false;
 					return responses;
 				}
+				var validation =await _oneTimePasswordService.ValidateOTP(new ValidateOneTimePasswordDTO() { Email = request.Email, OTP = request.OTP, Purpose = request.Purpose });
+				if (!validation.IsSuccessful)
+					return validation;
+
 				var jwtToken = await _jwtService.GenerateToken(request.Email);
-				var createdUser = await CreateUser(request, isAdditionalAccount);
+				var createdUser = await CreateUser(_mapper.Map<UserDTO>(request), false);
 
 				var responsePayload = _mapper.Map<LoginResponseDTO>(createdUser);
 				responsePayload.Token = jwtToken.JwtToken;

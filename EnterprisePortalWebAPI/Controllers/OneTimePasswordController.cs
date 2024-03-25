@@ -1,11 +1,12 @@
 ﻿using EnterprisePortalWebAPI.Core.DTO;
 using EnterprisePortalWebAPI.Service.Interface;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EnterprisePortalWebAPI.Controllers
 {
 	[ApiController]
+	[EnableCors("AllowMultipleOrigins")]
 	public class OneTimePasswordController(IOneTimePasswordService service) : RootController
 	{
 		private readonly IOneTimePasswordService _service = service;
