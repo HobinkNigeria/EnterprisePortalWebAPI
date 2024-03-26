@@ -18,15 +18,16 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 			var responses = new Responses(false);
 			try
 			{
-				var expiredOTPs = await _context.OneTimePasswords
-				.Where(x => x.Email.ToLower() == request.Email.ToLower() &&
-										(x.ExpiryTime <= DateTime.Now || x.IsUsed))
-				.ToListAsync();
+				var now = DateTime.Now;
+				var expiredAndOlderOTPs = await _context.OneTimePasswords
+						.Where(x => x.Email.ToLower() == request.Email.ToLower() &&
+												(x.ExpiryTime <= now || x.IsUsed || x.Purpose == request.Purpose))
+						.ToListAsync();
 
-				_context.OneTimePasswords.RemoveRange(expiredOTPs);
+				_context.OneTimePasswords.RemoveRange(expiredAndOlderOTPs);
 				await _context.SaveChangesAsync();
 
-				if(request.Purpose == Core.Enum.OneTimePasswordPurpose.Registration)
+				if (request.Purpose == Core.Enum.OneTimePasswordPurpose.Registration)
 				{
 					var user = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == request.Email.ToLower());
 					if (user is not null)
