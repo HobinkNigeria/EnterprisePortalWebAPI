@@ -185,6 +185,7 @@ namespace EnterprisePortalWebAPI.Service.Implementation
 				user.Password = Util.HashPassword(request.NewPassword);
 				user.PasswordLastChanged = DateTime.Now;
 				user.DateUpdated = DateTime.Now;
+				user.PasswordIsSystemGenerated = false;
 
 				_context.Update(user);
 				await _context.SaveChangesAsync();
